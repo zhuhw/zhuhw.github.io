@@ -16,7 +16,8 @@ Open <http://localhost:8000>. Stop the server with Ctrl+C.
 
 ## Publish on GitHub Pages
 
-The site is designed for <https://zhuhw.github.io/>.
+The site’s custom domain is <https://henryzhu.dev/>. GitHub Pages hosts it from
+the `zhuhw/zhuhw.github.io` repository.
 
 1. Push the files to the `main` branch of `zhuhw/zhuhw.github.io`.
 2. In the repository’s **Settings → Pages**, choose **Deploy from a branch**.
@@ -26,6 +27,40 @@ GitHub publishes `index.html` directly; `.nojekyll` disables Jekyll processing.
 If the repository is private, GitHub Pages requires a plan that supports private
 repositories. A public repository works with GitHub Free. See
 [GitHub’s Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site).
+
+## Custom domain: henryzhu.dev
+
+`CNAME` declares `henryzhu.dev` as the custom domain for this branch-based
+GitHub Pages site. The canonical URL, social metadata, sitemap, and robots file
+use the same domain.
+
+In **Settings → Pages**, confirm that **Custom domain** is `henryzhu.dev`.
+In Porkbun’s DNS settings for `henryzhu.dev`, add the following records. Leave
+the Host field blank for the root domain and use the default TTL.
+
+| Type | Host | Answer |
+| --- | --- | --- |
+| A | (blank) | 185.199.108.153 |
+| A | (blank) | 185.199.109.153 |
+| A | (blank) | 185.199.110.153 |
+| A | (blank) | 185.199.111.153 |
+| CNAME | www | zhuhw.github.io |
+
+Replace conflicting parking or forwarding records for the root and `www`;
+preserve unrelated records, including email and verification records. If root
+AAAA records already exist, they must also point to GitHub Pages; use the
+current addresses in the GitHub guide below or remove only those conflicting
+AAAA records.
+
+After DNS resolves and GitHub provisions its TLS certificate, enable **Enforce
+HTTPS** in Pages settings. GitHub redirects `www.henryzhu.dev` to the root domain
+when both DNS records are configured. DNS and certificate provisioning can take
+up to 24 hours. If DNS queries continue returning `SERVFAIL` after records are
+saved, check with Porkbun that the domain’s DNS zone is active on its assigned
+nameservers.
+
+References: [GitHub custom-domain configuration](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+and [Porkbun’s GitHub Pages guide](https://kb.porkbun.com/article/64-how-to-connect-your-domain-to-github-pages).
 
 ## Editing
 
